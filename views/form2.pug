@@ -1,0 +1,257 @@
+extends layout
+block content
+doctype html
+html
+  head(lang="pt-br")
+    title Formulário EP
+    meta(charset="utf-8")
+    //
+      <link rel="stylesheet" href="bibliotecas_css/leaflet.css">
+    link(rel="stylesheet" href="bibliotecas_css/leaflet_draw_1.0.2.css")
+    link(rel="stylesheet" href="https://unpkg.com/leaflet@1.4.0/dist/leaflet.css" integrity="sha512-puBpdR0798OZvTTbP4A8Ix/l+A4dHDD0DGqYW6RQ+9jxkRFclaxxQb/SJAWZfWAkuyeQUytO7+7N4QKrDh+drA==" crossorigin="")
+    link(rel="stylesheet" href="styles.css")
+    script(src="//ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js")
+    script(src="https://unpkg.com/leaflet@1.4.0/dist/leaflet.js" integrity="sha512-QVftwZFqvtRNi0ZyCtsznlKSWOStnDORoefr1enyq5mVL4tmKB3S/EnC3rRJcxCPavG10IcrVGSmPh6Qw5lwrg==" crossorigin="")
+    //
+      <script src="bibliotecas_js/Leaflet_lib_1.3.1.js"></script>
+    //
+      <script src="bibliotecas_js/Leaflet_IIIF.js"></script>
+      <script src="bibliotecas_js/jQuery_3.2.1.js"></script>
+    script(src="bibliotecas_js/Leaflet_draw_1.0.2.js")
+  body
+    .container
+      form(name="insert" action="insert.php" method="POST")
+        .sidebar
+          //
+            <label for="fname">procurar</label><br>
+            <input type="text" id="entrada" name="entrada" placeholder="Digite a entrada">
+            <br>
+            <input type="button" onclick="procuraId()" value="Procurar repid" title="teste"><br>
+          label(for="fname") Repid
+          br
+          input#repid(type="text" name="repid" placeholder="Digite o repid" readonly="readonly")
+          br
+          label(for="fname") Nome
+          br
+          input#nome(type="text" name="nome" placeholder="Digite o nome (text)" required="required")
+          br
+          //
+            <label for="fname">Tipo de Espaço Público</label><br>
+            <input type="text" id="tipo_ep" name="tipo_ep" placeholder="Tipo de Espaço Público (text)" required="required">
+            <br>
+          label(for="lname") Distrito
+          br
+          select#distrito(name="distrito" placeholder="Distrito" required="required")
+            option(value="Distrito") Distrito
+            option(value="BARRA DA LAGOA") Barra da Lagoa
+            option(value="CACHOEIRA DO BOM JESUS") Cachoeira do bom Jesus
+            option(value="CAMPECHE") Campeche
+            option(value="CANASVIEIRAS") Canasvieiras
+            option(value="INGLESES DO RIO VERMELHO") Ingleses do Rio Vermelho
+            option(value="LAGOA DA CONCEIÇÃO") Lagoa da Conceição
+            option(value="PÂNTANO DO SUL") Pântano do Sul
+            option(value="RATONES") Ratones
+            option(value="RIBEIRÃO DA ILHA") Ribeirão da Ilha
+            option(value="SANTO ANTÔNIO DE LISBOA") Santo Antônio de Lisboa
+            option(value="SÃO JOÃO DO RIO VERMELHO") São João do Rio Vermelho
+            option(value="SEDE INSULAR") Sede Insular
+            option(value="SEDE CONTINENTAL") Sede Continental
+          br
+          label(for="lname") Categoria
+          br
+          select#categoria(name="categoria" placeholder="categoria" required="required")
+            option(value="Categoria") Categoria
+            option(value="ESPAÇOS_LIVRES_ASSOCIADOS_À_CIRCULAÇÃO") Espaços livres associados à circulação
+            option(value="ESPAÇOS_LIVRES_ASSOCIADOS_À_ORLA") Espaços livres associados à orla
+            option(value="ESPAÇOS_LIVRES_DE_CONSERVAÇÃO_E_PRESERVAÇÃO_AMBIENTAL") Espaços livres de conservação e preservação ambiental
+            option(value="ESPAÇOS_LIVRES_DE_LAZER_E_RECREAÇÃO") Espaços livres de lazer e recreação
+            option(value="ESPAÇOS_LIVRES_NÃO_CLASSIFICADOS") Espaços livres não classificados
+          br
+          label(for="lname") Tipo de Espaço Público
+          br
+          select#tipo_ep(name="tipo_ep" placeholder="Tipo de Espaço Público" required="required" onchange="geraRepId()")
+            option(value="Tipo EP") Tipo de Espaço Público
+            option(value="Áreas esportivas abertas") Áreas esportivas abertas
+            option(value="Alamedas e Bulevares") Alamedas e Bulevares
+            option(value="Áreas naturais tombadas") Áreas naturais tombadas
+            option(value="Grandes aterros") Grandes aterros
+            option(value="Áreas públicas com vegetação relevante") Áreas públicas com vegetação relevante
+            option(value="Calçadões") Calçadões
+            option(value="Áreas públicas destinadas ao lazer não equipadas - oriundas de parcelamento") Áreas públicas destinadas ao lazer não equipadas - oriundas de parcelamento
+            option(value="Espaços livres de lazer e contemplação associados à orla") Espaços livres de lazer e contemplação associados à orla
+            option(value="Não classificados") Não classificados
+            option(value="Outras áreas") Outras áreas
+            option(value="Praças implantadas") Praças implantadas
+            option(value="Áreas públicas com potencial ao lazer não equipadas") Áreas públicas com potencial ao lazer não equipadas
+            option(value="Parques ecológicos") Parques ecológicos
+            option(value="Parques urbanos") Parques urbanos
+          br
+          label(for="fname") Sub categoria
+          br
+          input#sub_categoria(type="text" name="sub_categoria" placeholder="Subcategoria (text)" required="required")
+          br
+          label(for="fname") Inscrição Imobiliária
+          br
+          input#insc_imob(type="text" name="insc_imob" placeholder="Inscrição Imobiliária (inteiro)")
+          br
+          label(for="fname") Zoneamento
+          br
+          input#zoneamento(type="text" name="zoneamento" placeholder="Zoneamento (text)")
+          br
+          label(for="fname") Área Total
+          br
+          input#area(type="text" name="area" placeholder="Área (inteiro)" required="required")
+          br
+          label(for="fname") Origem
+          br
+          input#origem(type="text" name="origem" placeholder="Origem (text)")
+          br
+          label(for="fname") Última Manutenção
+          br
+          input#ultima_manutencao(type="text" name="ultima_manutencao" placeholder="Data da Última Manutenção (ex: 2019-06-24)")
+          br
+          label(for="lname") Adotada?
+          br
+          input#situacao_adocao(type="radio" name="situacao_adocao" value="TRUE" required="required")
+          | Sim
+          input#situacao_adocao(type="radio" name="situacao_adocao" value="FALSE" required="required")
+          | Não
+          br
+          br
+          label(for="lname") Praça Viva?
+          br
+          input#praca_viva(type="radio" name="praca_viva" value="TRUE" required="required")
+          | Sim
+          input#praca_viva(type="radio" name="praca_viva" value="FALSE" required="required")
+          | Não
+          br
+          br
+          label(for="fname") Postes
+          br
+          input#postes(type="text" name="postes" placeholder="Postes (inteiro)")
+          br
+          label(for="fname") Lixeiras
+          br
+          input#lixeiras(type="text" name="lixeiras" placeholder="Lixeiras (inteiro)")
+          br
+          label(for="fname") Paraciclos
+          br
+          input#paraciclos(type="text" name="paraciclos" placeholder="Paraciclos (inteiro)")
+          br
+          label(for="fname") Mesas
+          br
+          input#mesas(type="text" name="mesas" placeholder="Mesas (inteiro)")
+          br
+          label(for="fname") Bancos
+          br
+          input#bancos(type="text" name="bancos" placeholder="Bancos (inteiro)")
+          br
+          label(for="lname") Academia
+          br
+          input#academia(type="radio" name="academia" value="TRUE")
+          | Sim
+          input#academia(type="radio" name="academia" value="FALSE")
+          | Não
+          br
+          br
+          label(for="lname") Estação de Alongamento
+          br
+          input#estacao_alongamento(type="radio" name="estacao_alongamento" value="TRUE")
+          | Sim
+          input#estacao_alongamento(type="radio" name="estacao_alongamento" value="FALSE")
+          | Não
+          br
+          br
+          label(for="lname") Pista de Skate
+          br
+          input#pista_skate(type="radio" name="pista_skate" value="TRUE")
+          | Sim
+          input#pista_skate(type="radio" name="pista_skate" value="FALSE")
+          | Não
+          br
+          br
+          label(for="lname") Pista de Corrida
+          br
+          input#pista_corrida(type="radio" name="pista_corrida" value="TRUE")
+          | Sim
+          input#pista_corrida(type="radio" name="pista_corrida" value="FALSE")
+          | Não
+          br
+          br
+          label(for="lname") Quadra de Areia
+          br
+          input#quadra_areia(type="radio" name="quadra_areia" value="TRUE")
+          | Sim
+          input#quadra_areia(type="radio" name="quadra_areia" value="FALSE")
+          | Não
+          br
+          br
+          label(for="lname") Quadra Poliesportiva
+          br
+          input#quadra_poli(type="radio" name="quadra_poli" value="TRUE")
+          | Sim
+          input#quadra_poli(type="radio" name="quadra_poli" value="FALSE")
+          | Não
+          br
+          br
+          label(for="lname") Campo de Futebol
+          br
+          input#campo_futebol(type="radio" name="campo_futebol" value="TRUE")
+          | Sim
+          input#campo_futebol(type="radio" name="campo_futebol" value="FALSE")
+          | Não
+          br
+          br
+          label(for="lname") Pet place
+          br
+          input#pet_place(type="radio" name="pet_place" value="TRUE")
+          | Sim
+          input#pet_place(type="radio" name="pet_place" value="FALSE")
+          | Não
+          br
+          br
+          label(for="lname") Parque Infantil
+          br
+          input#parque_infantil(type="radio" name="parque_infantil" value="TRUE")
+          | Sim
+          input#parque_infantil(type="radio" name="parque_infantil" value="FALSE")
+          | Não
+          br
+          br
+          label(for="lname") Horta
+          br
+          input#horta(type="radio" name="horta" value="TRUE")
+          | Sim
+          input#horta(type="radio" name="horta" value="FALSE")
+          | Não
+          br
+          br
+          label(for="fname") Latitude
+          br
+          input#lat_y(type="text" name="lat_y" placeholder="Latitude (ex: -27.5969)" required="required")
+          br
+          label(for="fname") Longitude
+          br
+          input#long_x(type="text" name="long_x" placeholder="Longitude (ex: -48.5495)" required="required")
+          br
+          input#ponto(type="text" name="ponto" hidden="")
+          br
+          input(type="button" onclick="mostraPonto()" value="Vizualiar ponto apartir das cordenadas inseridas")
+          input(type="button" onclick="geraGeoJson()" value="Salvar ponto" title="teste")
+          input(type="submit" value="Enviar")
+          input(type="button" onclick="salvarCordenadasPontoInserido()" value="Salva cordenadas do ponto inserido" title="teste")
+        br
+        .mapa
+          #map
+    //
+      <footer class="site-footer">
+      <div class="informacao">
+      <strong style="color: aliceblue">FORMULÁRIO SMI | Versão beta</strong>
+      </div>
+      <div class="logo">
+      <img src="imagens/LOGO_PMF.png" alt="Logo prefeitura" width=180px height=auto>
+      <img src="imagens/REP__LOGO.png" alt="Logo REP" width=120px height=auto>
+      <img src="imagens/IPUF_LOGO.png" alt="Logo IPUF" width=150px height=auto>
+      </div>
+      </footer>
+    script(src="app.js")

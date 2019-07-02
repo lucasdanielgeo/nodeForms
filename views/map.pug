@@ -1,0 +1,42 @@
+extends layout
+block content
+    #map
+        #sidebar(class="leaflet-sidebar collapsed")
+            .leaflet-sidebar-tabs
+                ul(role="tablist")
+                    li
+                        a(href="/map" role="tab")
+            .leaflet-sidebar-content
+                .leaflet-sidebar-pane(id="home")
+                    h1(class="leaflet-sidebar-header") sidebar-v2
+
+    script. 
+        let myData = !{JSON.stringify(jsonData)}
+        // create variable to hold map element, give initial settings to map
+        let map = L.map('map',{ zoomControl: true, maxZoom: 16, minZoom: 1 }).fitBounds([[-27.6313944309,-48.6257545894],[-27.5438007667,-48.4678008111]])
+        // add osm tile layer
+        L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', { attribution: '© OpenStreetMap' }).addTo(map)
+        // add json to map
+        L.geoJson(myData, {
+            onEachFeature: function (feature, layer) {
+                layer.bindPopup(feature.properties.f2)
+            }
+        }).addTo(map)
+        const sidebar = L.control.sidebar({ 
+            autopan: false,       // whether to maintain the centered map point when opening the sidebar
+            closeButton: true,    // whether t add a close button to the panes
+            container: 'sidebar', // the DOM container or #ID of a predefined sidebar container that should be used
+            position: 'left',     // left or right
+        }).addTo(map);
+        const panelContent = {
+            id: 'userinfo',                     // UID, used to access the panel
+            tab: '<i class="fa fa-gear"></i>',  // content can be passed as HTML string,
+            pane: someDomNode.innerHTML,        // DOM elements can be passed, too
+            title: 'Your Profile',              // an optional pane header
+            position: 'bottom'                  // optional vertical alignment, defaults to 'top'
+        }
+        sidebar.addPanel({
+            id: 'ghlink',
+            tab: '<i class="fa fa-github"></i>',
+            button: 'https://github.com/nickpeihl/leaflet-sidebar-v2',
+        })
