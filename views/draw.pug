@@ -1,0 +1,33 @@
+extends layout
+block content
+  .container
+    header
+      img(src="../images/LOGO_PMF.png" alt="Logo prefeitura" width="300px" height="auto")
+      img(src="../images/REP__LOGO.png" alt="Logo REP" width="200px" height="auto")
+      img(src="../images/IPUF_LOGO.png" alt="Logo IPUF" width="250px" height="auto")
+    form(name="insert" action="/draw" method="POST")
+      label(for="fname") Nome
+      input#nome(type="text" name="nome" placeholder="Nome")
+      label(for="lname") Email
+      input#email(type="text" name="email" placeholder="Email")
+      label(for="lname") Telefone
+      input#telefone(type="text" name="telefone" placeholder="Telefone")
+      label(for="lname") Distrito
+      input#distrito(type="text" name="distrito" placeholder="Distrito")
+      label(for="subject") Intenção
+      textarea#intencao(name="intencao" placeholder="Especifique sua intenção" style="height:200px")
+      label(for="lname") Desenhe a area e clique em: "salvar desenho", as informações do desenho apareceream na caixa "Geometria"
+      #map
+      label(for="lname") Geometria
+      input#geometria(type="text" name="geometria" placeholder="Não insira nada aqui")
+      input(type="button" onclick="salvarPoligono()" value="salvar desenho")
+      input(type="submit" value="Enviar")
+  script(src="../javascripts/app.js")
+  script.
+    function salvarPoligono(){
+    const poligono = featureGroup.toGeoJSON(); //variavel que recebe as cordenadas do poligono
+    const poligonoConvertido = JSON.stringify(poligono); //variavel que recebe o geojson convertido em string
+    console.log(poligonoConvertido);
+    document.getElementById("geometria").value = poligonoConvertido;
+    //document.getElementById("geometria").value = poligono
+    }
